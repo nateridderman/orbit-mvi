@@ -111,6 +111,7 @@ internal class ContainerThreadingTest {
                     expectedStates.last().copy(ids = expectedStates.last().ids + (value + 1))
                 )
 
+                @Suppress("EXPERIMENTAL_API_USAGE")
                 GlobalScope.launch {
                     when (value) {
                         0 -> container.one(true)

@@ -25,6 +25,11 @@ plugins {
     id("androidx.navigation.safeargs.kotlin")
 }
 
+repositories {
+    // For Groupie for the time being
+    jcenter()
+}
+
 android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -60,9 +65,9 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.12.0")
     implementation("com.xwray:groupie:2.9.0")
     implementation("com.xwray:groupie-viewbinding:2.9.0")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.3.3")
-    implementation("androidx.navigation:navigation-ui-ktx:2.3.3")
-    implementation("androidx.lifecycle:lifecycle-common-java8:2.3.0")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.3.5")
+    implementation("androidx.navigation:navigation-ui-ktx:2.3.5")
+    implementation("androidx.lifecycle:lifecycle-common-java8:2.3.1")
 
     // Networking
     implementation("com.squareup.okhttp3:okhttp:4.9.1")
@@ -73,7 +78,7 @@ dependencies {
     implementation(kotlin("reflect"))
 
     // Dependency Injection
-    implementation("org.koin:koin-androidx-viewmodel:2.2.1")
+    implementation("io.insert-koin:koin-android:3.0.1")
 
     // Testing
     testImplementation(project(":orbit-test"))
@@ -82,8 +87,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.1")
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.7.1")
     testImplementation("junit:junit:4.13.2")
-    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
-    testImplementation("org.mockito:mockito-inline:3.7.7")
-    testImplementation("com.appmattus.fixture:fixture:1.0.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:3.2.0")
+    testImplementation("com.appmattus.fixture:fixture:1.1.0")
     testImplementation("com.squareup.retrofit2:retrofit-mock:2.9.0")
 }

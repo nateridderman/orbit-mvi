@@ -102,9 +102,11 @@ public fun <STATE : Any, SIDE_EFFECT : Any> ContainerHost<STATE, SIDE_EFFECT>.as
 
     if (!testFixtures.blocking) {
         // With non-blocking mode await for expected states
+        @Suppress("EXPERIMENTAL_API_USAGE")
         val stateJob = GlobalScope.launch {
             testFixtures.stateObserver.awaitCountSuspending(verification.expectedStateChanges.size + 1, timeoutMillis)
         }
+        @Suppress("EXPERIMENTAL_API_USAGE")
         val sideEffectJob = GlobalScope.launch {
             testFixtures.sideEffectObserver.awaitCountSuspending(verification.expectedSideEffects.size, timeoutMillis)
         }

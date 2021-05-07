@@ -29,7 +29,7 @@ import java.net.URL
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
@@ -81,7 +81,7 @@ tasks.withType<DependencyUpdatesTask> {
 subprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 
     version = (System.getenv("GITHUB_REF") ?: System.getProperty("GITHUB_REF"))

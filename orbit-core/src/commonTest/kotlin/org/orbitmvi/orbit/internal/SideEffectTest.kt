@@ -137,6 +137,7 @@ internal class SideEffectTest {
         testSideEffectObserver1.awaitCount(1)
         testSideEffectObserver1.close()
 
+        @Suppress("EXPERIMENTAL_API_USAGE")
         GlobalScope.launch {
             repeat(1000) {
                 container.someFlow(it)

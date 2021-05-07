@@ -21,7 +21,7 @@ plugins {
 }
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 tasks.withType(KotlinCompile::class.java).all {

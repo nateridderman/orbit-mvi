@@ -42,6 +42,7 @@ public class TestFlowObserver<T>(flow: Flow<T>) {
         get() = _values.value
 
     init {
+        @Suppress("EXPERIMENTAL_API_USAGE")
         GlobalScope.launch(Dispatchers.Unconfined + job) {
             flow.collect { emission ->
                 _values.getAndUpdate { it + emission }

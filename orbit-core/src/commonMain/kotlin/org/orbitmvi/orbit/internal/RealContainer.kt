@@ -40,7 +40,6 @@ import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.syntax.ContainerContext
 import kotlin.coroutines.EmptyCoroutineContext
 
-@Suppress("EXPERIMENTAL_API_USAGE")
 public open class RealContainer<STATE : Any, SIDE_EFFECT : Any>(
     initialState: STATE,
     parentScope: CoroutineScope,
@@ -70,6 +69,7 @@ public open class RealContainer<STATE : Any, SIDE_EFFECT : Any>(
         }
     )
 
+    @Suppress("EXPERIMENTAL_API_USAGE")
     override fun orbit(orbitFlow: suspend ContainerContext<STATE, SIDE_EFFECT>.() -> Unit) {
         if (initialised.compareAndSet(expect = false, update = true)) {
             scope.produce<Unit>(Dispatchers.Unconfined) {
@@ -85,6 +85,6 @@ public open class RealContainer<STATE : Any, SIDE_EFFECT : Any>(
                 }
             }
         }
-        dispatchChannel.offer(orbitFlow)
+        dispatchChannel.trySend(orbitFlow) // Safe to call, dispatch channel has unlimited capacity
     }
 }
