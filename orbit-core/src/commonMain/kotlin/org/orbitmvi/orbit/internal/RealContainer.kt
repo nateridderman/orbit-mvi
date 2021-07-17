@@ -23,10 +23,10 @@ package org.orbitmvi.orbit.internal
 import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.produce
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -38,7 +38,6 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.syntax.ContainerContext
-import kotlin.coroutines.EmptyCoroutineContext
 
 @Suppress("EXPERIMENTAL_API_USAGE")
 public class RealContainer<STATE : Any, SIDE_EFFECT : Any>(
@@ -83,10 +82,25 @@ public class RealContainer<STATE : Any, SIDE_EFFECT : Any>(
                 }
             }
             scope.launch {
-                val context = Dispatchers.Unconfined + (settings.exceptionHandler?.plus(SupervisorJob()) ?: EmptyCoroutineContext)
+                val context = Dispatchers.Unconfined
 
                 for (msg in dispatchChannel) {
-                    launch(context) { pluginContext.msg() }
+                    launch(context) {
+                        if (settings.exceptionHandler != null) {
+                            runCatching {
+                                coroutineScope {
+                                    pluginContext.msg()
+                                }
+                            }.fold(
+                                onSuccess = { },
+                                onFailure = {
+                                    settings.exceptionHandler.handleException(coroutineContext, it)
+                                }
+                            )
+                        } else {
+                            pluginContext.msg()
+                        }
+                    }
                 }
             }
         }
