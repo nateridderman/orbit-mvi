@@ -1,0 +1,76 @@
+package org.orbitmvi.orbit.sample.posts.app.features.postdetails.ui
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import coil.compose.rememberImagePainter
+import org.orbitmvi.orbit.sample.posts.android.R
+import org.orbitmvi.orbit.sample.posts.app.common.AppBar
+import org.orbitmvi.orbit.sample.posts.app.features.postdetails.viewmodel.PostDetailState
+import org.orbitmvi.orbit.sample.posts.app.features.postdetails.viewmodel.PostDetailsViewModel
+
+@Composable
+fun PostDetailsScreen(navController: NavController, viewModel: PostDetailsViewModel) {
+
+    val state = viewModel.container.stateFlow.collectAsState().value
+
+    Column {
+        AppBar(state.postOverview.username, iconPainter = rememberImagePainter(state.postOverview.avatarUrl)) {
+            navController.popBackStack()
+        }
+
+        LazyColumn {
+            item {
+                Text(
+                    text = state.postOverview.title,
+                    style = MaterialTheme.typography.h4,
+                    modifier = Modifier
+                        .padding(start = 16.dp, end = 16.dp, top = 16.dp)
+                        .fillMaxWidth()
+                )
+            }
+
+            if (state is PostDetailState.Details) {
+                item {
+                    Text(
+                        text = state.post.body,
+                        style = MaterialTheme.typography.body1,
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth()
+                    )
+
+                    Divider(color = colorResource(id = R.color.separator), modifier = Modifier.padding(16.dp))
+
+                    val resources = LocalContext.current.resources
+                    Text(
+                        text = resources.getQuantityString(
+                            R.plurals.comments, state.post.comments.size, state.post.comments.size
+                        ),
+                        style = MaterialTheme.typography.subtitle1,
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth()
+                    )
+                }
+
+                itemsIndexed(state.post.comments) { index, comment ->
+                    if (index != 0) Divider(color = colorResource(id = R.color.separator), modifier = Modifier.padding(horizontal = 16.dp))
+                    PostCommentItem(comment)
+                }
+            }
+        }
+    }
+}
