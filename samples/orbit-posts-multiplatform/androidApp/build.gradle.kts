@@ -5,27 +5,14 @@ plugins {
     id("androidx.navigation.safeargs.kotlin")
 }
 
-repositories {
-    exclusiveContent {
-        forRepository {
-            maven { setUrl("https://jitpack.io") }
-        }
-        filter {
-            includeGroup("com.github.lisawray.groupie")
-        }
-    }
-}
-
 dependencies {
     implementation(project(":shared"))
     implementation("com.google.android.material:material:1.4.0")
     implementation("androidx.appcompat:appcompat:1.3.1")
     implementation("androidx.constraintlayout:constraintlayout:2.0.4")
 
-
     implementation("org.orbit-mvi:orbit-core:4.1.3")
     implementation("org.orbit-mvi:orbit-viewmodel:4.1.3")
-
 
     implementation("io.ktor:ktor-client-android:1.6.2")
 
@@ -37,9 +24,6 @@ dependencies {
     // UI
     implementation("androidx.constraintlayout:constraintlayout:2.0.4")
     implementation("com.google.android.material:material:1.4.0")
-    implementation("com.github.bumptech.glide:glide:4.12.0")
-    //implementation("com.github.lisawray.groupie:groupie:2.9.0")
-    //implementation("com.github.lisawray.groupie:groupie-viewbinding:2.9.0")
     implementation("androidx.navigation:navigation-fragment-ktx:2.3.5")
     implementation("androidx.navigation:navigation-ui-ktx:2.3.5")
     implementation("androidx.lifecycle:lifecycle-common-java8:2.4.0-alpha02")

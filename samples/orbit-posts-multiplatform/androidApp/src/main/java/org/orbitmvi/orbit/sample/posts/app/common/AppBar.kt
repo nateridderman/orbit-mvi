@@ -20,6 +20,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -31,11 +32,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.orbitmvi.orbit.sample.posts.android.R
 
 @Composable
-fun AppBar(topAppBarText: String, iconPainter: Painter? = null, onBackPressed: (() -> Unit)? = null) {
+fun AppBar(topAppBarText: String, elevation: Dp = AppBarDefaults.TopAppBarElevation, iconPainter: Painter? = null, onBackPressed: (() -> Unit)? = null) {
     TopAppBar(
         title = {
             Row {
@@ -61,6 +63,7 @@ fun AppBar(topAppBarText: String, iconPainter: Painter? = null, onBackPressed: (
             }
         },
         backgroundColor = Color.White,
-        contentColor = Color.Black
+        contentColor = Color.Black,
+        elevation = elevation
     )
 }

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -18,6 +19,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import org.orbitmvi.orbit.sample.posts.android.R
 import org.orbitmvi.orbit.sample.posts.app.common.AppBar
+import org.orbitmvi.orbit.sample.posts.app.common.elevation
 import org.orbitmvi.orbit.sample.posts.app.features.postdetails.viewmodel.PostDetailState
 import org.orbitmvi.orbit.sample.posts.app.features.postdetails.viewmodel.PostDetailsViewModel
 
@@ -26,12 +28,18 @@ fun PostDetailsScreen(navController: NavController, viewModel: PostDetailsViewMo
 
     val state = viewModel.container.stateFlow.collectAsState().value
 
+    val lazyListState = rememberLazyListState()
+
     Column {
-        AppBar(state.postOverview.username, iconPainter = rememberImagePainter(state.postOverview.avatarUrl)) {
+        AppBar(
+            state.postOverview.username,
+            iconPainter = rememberImagePainter(state.postOverview.avatarUrl),
+            elevation = lazyListState.elevation
+        ) {
             navController.popBackStack()
         }
 
-        LazyColumn {
+        LazyColumn(state = lazyListState) {
             item {
                 Text(
                     text = state.postOverview.title,

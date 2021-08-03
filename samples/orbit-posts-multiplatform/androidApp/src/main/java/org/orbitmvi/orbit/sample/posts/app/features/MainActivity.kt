@@ -21,8 +21,6 @@
 package org.orbitmvi.orbit.sample.posts.app.features
 
 import android.os.Bundle
-import android.os.Parcel
-import android.os.Parcelable
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
@@ -31,9 +29,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import io.ktor.util.decodeBase64Bytes
 import org.koin.android.ext.android.get
 import org.koin.androidx.viewmodel.ext.android.getStateViewModel
+import org.orbitmvi.orbit.sample.posts.app.common.toRouteParcelable
 import org.orbitmvi.orbit.sample.posts.app.features.postdetails.ui.PostDetailsScreen
 import org.orbitmvi.orbit.sample.posts.app.features.postdetails.viewmodel.PostDetailsViewModel
 import org.orbitmvi.orbit.sample.posts.app.features.postlist.ui.PostListScreen
@@ -55,14 +53,7 @@ class MainActivity : AppCompatActivity() {
                 composable("detail/{item}") {
                     val itemStr = it.arguments?.getString("item")!!
 
-                    @Suppress("EXPERIMENTAL_API_USAGE_ERROR")
-                    val serializedBytes = itemStr.decodeBase64Bytes()
-
-                    val result = Parcel.obtain().run {
-                        unmarshall(serializedBytes, 0, serializedBytes.size)
-                        setDataPosition(0)
-                        readParcelable<Parcelable>(PostOverview::class.java.classLoader) as PostOverview
-                    }
+                    val result = itemStr.toRouteParcelable<PostOverview>()
 
                     // Work around a bug in Koin
                     val viewModel = viewModel<PostDetailsViewModel>(factory = object : ViewModelProvider.Factory {

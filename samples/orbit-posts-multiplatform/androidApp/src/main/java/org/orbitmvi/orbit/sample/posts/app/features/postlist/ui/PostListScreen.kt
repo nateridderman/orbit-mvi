@@ -16,32 +16,27 @@
 
 package org.orbitmvi.orbit.sample.posts.app.features.postlist.ui
 
-import android.os.Bundle
-import android.os.Parcel
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.NavOptionsBuilder
-import androidx.navigation.Navigator
-import io.ktor.util.InternalAPI
-import io.ktor.util.encodeBase64
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.sample.posts.android.R
 import org.orbitmvi.orbit.sample.posts.app.common.AppBar
 import org.orbitmvi.orbit.sample.posts.app.common.NavigationEvent
-import org.orbitmvi.orbit.sample.posts.app.common.navigate
+import org.orbitmvi.orbit.sample.posts.app.common.elevation
+import org.orbitmvi.orbit.sample.posts.app.common.toRouteString
 import org.orbitmvi.orbit.sample.posts.app.features.postlist.viewmodel.OpenPostNavigationEvent
 import org.orbitmvi.orbit.sample.posts.app.features.postlist.viewmodel.PostListViewModel
 
@@ -56,10 +51,12 @@ fun PostListScreen(navController: NavController, viewModel: PostListViewModel) {
         }
     }
 
-    Column {
-        AppBar(stringResource(id = R.string.app_name))
+    val lazyListState = rememberLazyListState()
 
-        LazyColumn {
+    Column {
+        AppBar(stringResource(id = R.string.app_name), elevation = lazyListState.elevation)
+
+        LazyColumn(state = lazyListState) {
             itemsIndexed(state.overviews) { index, post ->
                 if (index != 0) Divider(color = colorResource(id = R.color.separator), modifier = Modifier.padding(horizontal = 16.dp))
 
@@ -71,24 +68,11 @@ fun PostListScreen(navController: NavController, viewModel: PostListViewModel) {
     }
 }
 
-
 private fun handleSideEffect(navController: NavController, sideEffect: NavigationEvent) {
     when (sideEffect) {
         is OpenPostNavigationEvent -> {
-
-
-            @Suppress("EXPERIMENTAL_API_USAGE_ERROR")
-            val serializedBytes = Parcel.obtain().run {
-                writeParcelable(sideEffect.post, 0)
-                marshall()
-            }.encodeBase64()
-
-
-
-            //sideEffect.post.writeToParcel()
-
-            navController.navigate("detail/$serializedBytes")
-            //navController.currentBackStackEntry?.arguments = Bundle().apply { putParcelable("item", sideEffect.post) }
+            val data = sideEffect.post.toRouteString()
+            navController.navigate("detail/$data")
         }
     }
 }
