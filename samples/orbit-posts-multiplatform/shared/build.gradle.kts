@@ -5,19 +5,12 @@ plugins {
     kotlin("multiplatform")
     id("com.android.library")
     id("kotlin-parcelize")
-    kotlin("plugin.serialization") version "1.5.10"
+    kotlin("plugin.serialization") version "1.5.20"
 }
 
 kotlin {
     android()
-
-    val iosTarget: (String, KotlinNativeTarget.() -> Unit) -> KotlinNativeTarget =
-        if (System.getenv("SDK_NAME")?.startsWith("iphoneos") == true)
-            ::iosArm64
-        else
-            ::iosX64
-
-    iosTarget("ios") {
+    ios {
         binaries {
             framework {
                 baseName = "shared"
@@ -30,10 +23,7 @@ kotlin {
             dependencies {
                 implementation("org.orbit-mvi:orbit-core:4.1.3")
                 implementation("dev.icerock.moko:mvvm-core:0.11.0") // only ViewModel, EventsDispatcher, Dispatchers.UI
-
-                // TypeAliasDescriptor expected: class Parcelable (not found) if Parcelable typealias not exposed
-                // Fixed in Kotlin 1.5.20
-                api("dev.icerock.moko:parcelize:0.7.1")
+                implementation("dev.icerock.moko:parcelize:0.7.1")
 
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
 
@@ -84,3 +74,37 @@ android {
         targetSdk = 30
     }
 }
+
+val xcFrameworkPath = "$buildDir/xcode-frameworks/${project.name}.xcframework"
+
+tasks.create<Delete>("deleteXcFramework") { delete = setOf(xcFrameworkPath) }
+
+val buildXcFramework by tasks.registering {
+    dependsOn("deleteXcFramework")
+    group = "build"
+    val mode = "Release"
+    val frameworks = arrayOf("iosArm64", "iosX64")
+        .map { kotlin.targets.getByName<KotlinNativeTarget>(it).binaries.getFramework(mode) }
+    inputs.property("mode", mode)
+    dependsOn(frameworks.map { it.linkTask })
+    doLast { buildXcFramework(frameworks) }
+}
+
+fun Task.buildXcFramework(frameworks: List<org.jetbrains.kotlin.gradle.plugin.mpp.Framework>) {
+    val buildArgs: () -> List<String> = {
+        val arguments = mutableListOf("-create-xcframework")
+        frameworks.forEach {
+            arguments += "-framework"
+            arguments += "${it.outputDirectory}/${project.name}.framework"
+        }
+        arguments += "-output"
+        arguments += xcFrameworkPath
+        arguments
+    }
+    exec {
+        executable = "xcodebuild"
+        args = buildArgs()
+    }
+}
+
+tasks.getByName("build").dependsOn(buildXcFramework)

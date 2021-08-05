@@ -3,12 +3,20 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152FB032600AC8F00CF470E /* iOSApp.swift */; };
 		7555FF83242A565900829871 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* ContentView.swift */; };
+		C608C0DC26BB3B95000D1C33 /* shared.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C608C0DB26BB3B95000D1C33 /* shared.xcframework */; };
+		C608C0DD26BB3B95000D1C33 /* shared.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C608C0DB26BB3B95000D1C33 /* shared.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C608C0E326BB4153000D1C33 /* PostListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C608C0E226BB4153000D1C33 /* PostListItemView.swift */; };
+		C608C0ED26BC96D0000D1C33 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = C608C0E926BC96D0000D1C33 /* ImageCache.swift */; };
+		C608C0EE26BC96D0000D1C33 /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C608C0EA26BC96D0000D1C33 /* AsyncImage.swift */; };
+		C608C0EF26BC96D0000D1C33 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C608C0EB26BC96D0000D1C33 /* ImageLoader.swift */; };
+		C608C0F026BC96D0000D1C33 /* EnvironmentValues+ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = C608C0EC26BC96D0000D1C33 /* EnvironmentValues+ImageCache.swift */; };
+		C608C0F226BC9778000D1C33 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = C608C0F126BC9778000D1C33 /* Color.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -18,6 +26,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				C608C0DD26BB3B95000D1C33 /* shared.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -30,6 +39,13 @@
 		7555FF82242A565900829871 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7555FF8C242A565B00829871 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7555FFB1242A642300829871 /* shared.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = shared.framework; path = "../shared/build/xcode-frameworks/shared.framework"; sourceTree = "<group>"; };
+		C608C0DB26BB3B95000D1C33 /* shared.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = shared.xcframework; path = "../shared/build/xcode-frameworks/shared.xcframework"; sourceTree = "<group>"; };
+		C608C0E226BB4153000D1C33 /* PostListItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListItemView.swift; sourceTree = "<group>"; };
+		C608C0E926BC96D0000D1C33 /* ImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
+		C608C0EA26BC96D0000D1C33 /* AsyncImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncImage.swift; sourceTree = "<group>"; };
+		C608C0EB26BC96D0000D1C33 /* ImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
+		C608C0EC26BC96D0000D1C33 /* EnvironmentValues+ImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EnvironmentValues+ImageCache.swift"; sourceTree = "<group>"; };
+		C608C0F126BC9778000D1C33 /* Color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,6 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C608C0DC26BB3B95000D1C33 /* shared.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,6 +80,8 @@
 		7555FF7D242A565900829871 /* iosApp */ = {
 			isa = PBXGroup;
 			children = (
+				C608C0E626BC9685000D1C33 /* common */,
+				C608C0DE26BB4109000D1C33 /* features */,
 				7555FF82242A565900829871 /* ContentView.swift */,
 				7555FF8C242A565B00829871 /* Info.plist */,
 				2152FB032600AC8F00CF470E /* iOSApp.swift */,
@@ -73,9 +92,70 @@
 		7555FFB0242A642200829871 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C608C0DB26BB3B95000D1C33 /* shared.xcframework */,
 				7555FFB1242A642300829871 /* shared.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C608C0DE26BB4109000D1C33 /* features */ = {
+			isa = PBXGroup;
+			children = (
+				C608C0DF26BB4110000D1C33 /* postlist */,
+			);
+			path = features;
+			sourceTree = "<group>";
+		};
+		C608C0DF26BB4110000D1C33 /* postlist */ = {
+			isa = PBXGroup;
+			children = (
+				C608C0E026BB4120000D1C33 /* ui */,
+				C608C0E126BB4125000D1C33 /* viewmodel */,
+			);
+			path = postlist;
+			sourceTree = "<group>";
+		};
+		C608C0E026BB4120000D1C33 /* ui */ = {
+			isa = PBXGroup;
+			children = (
+				C608C0E226BB4153000D1C33 /* PostListItemView.swift */,
+			);
+			path = ui;
+			sourceTree = "<group>";
+		};
+		C608C0E126BB4125000D1C33 /* viewmodel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = viewmodel;
+			sourceTree = "<group>";
+		};
+		C608C0E626BC9685000D1C33 /* common */ = {
+			isa = PBXGroup;
+			children = (
+				C608C0E726BC968D000D1C33 /* ui */,
+			);
+			path = common;
+			sourceTree = "<group>";
+		};
+		C608C0E726BC968D000D1C33 /* ui */ = {
+			isa = PBXGroup;
+			children = (
+				C608C0F126BC9778000D1C33 /* Color.swift */,
+				C608C0E826BC9693000D1C33 /* asyncimage */,
+			);
+			path = ui;
+			sourceTree = "<group>";
+		};
+		C608C0E826BC9693000D1C33 /* asyncimage */ = {
+			isa = PBXGroup;
+			children = (
+				C608C0EA26BC96D0000D1C33 /* AsyncImage.swift */,
+				C608C0EC26BC96D0000D1C33 /* EnvironmentValues+ImageCache.swift */,
+				C608C0E926BC96D0000D1C33 /* ImageCache.swift */,
+				C608C0EB26BC96D0000D1C33 /* ImageLoader.swift */,
+			);
+			path = asyncimage;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -159,7 +239,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd \"$SRCROOT/..\"\n./gradlew :shared:embedAndSignAppleFrameworkForXcode\n";
+			shellScript = "cd \"$SRCROOT/..\"\n./gradlew :shared:buildXcFramework\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -168,7 +248,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C608C0EE26BC96D0000D1C33 /* AsyncImage.swift in Sources */,
+				C608C0E326BB4153000D1C33 /* PostListItemView.swift in Sources */,
+				C608C0F026BC96D0000D1C33 /* EnvironmentValues+ImageCache.swift in Sources */,
+				C608C0EF26BC96D0000D1C33 /* ImageLoader.swift in Sources */,
 				2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */,
+				C608C0F226BC9778000D1C33 /* Color.swift in Sources */,
+				C608C0ED26BC96D0000D1C33 /* ImageCache.swift in Sources */,
 				7555FF83242A565900829871 /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -297,6 +383,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)";
 				INFOPLIST_FILE = iosApp/Info.plist;
@@ -321,6 +408,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)";
 				INFOPLIST_FILE = iosApp/Info.plist;

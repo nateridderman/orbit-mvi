@@ -5,7 +5,7 @@ struct ContentView: View {
 	let greet = Greeting().greeting()
 
 	var body: some View {
-		Text(greet)
+		PostListItemView(postOverview: PostOverview(id: 0, avatarUrl: "https://upload.wikimedia.org/wikipedia/commons/a/ab/Apple-logo.png", title: "Matthew Dolan", username: "Director"))
 	}
 }
 
