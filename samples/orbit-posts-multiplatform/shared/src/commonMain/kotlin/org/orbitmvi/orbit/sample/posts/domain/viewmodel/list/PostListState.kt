@@ -18,11 +18,13 @@
  * See: https://github.com/orbit-mvi/orbit-mvi/compare/c5b8b3f2b83b5972ba2ad98f73f75086a89653d3...main
  */
 
-package org.orbitmvi.orbit.sample.posts.app.features.postlist.viewmodel
+package org.orbitmvi.orbit.sample.posts.domain.viewmodel.list
 
-import org.orbitmvi.orbit.sample.posts.app.common.NavigationEvent
+import dev.icerock.moko.parcelize.Parcelable
+import dev.icerock.moko.parcelize.Parcelize
 import org.orbitmvi.orbit.sample.posts.domain.repositories.PostOverview
 
-data class OpenPostNavigationEvent(
-    val post: PostOverview
-) : NavigationEvent
+@Parcelize
+data class PostListState(
+    val overviews: List<PostOverview> = emptyList()
+) : Parcelable

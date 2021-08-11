@@ -1,6 +1,5 @@
 /*
  * Copyright 2021 Mikołaj Leszczyński & Appmattus Limited
- * Copyright 2020 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,30 +12,19 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
- * File modified by Mikołaj Leszczyński & Appmattus Limited
- * See: https://github.com/orbit-mvi/orbit-mvi/compare/c5b8b3f2b83b5972ba2ad98f73f75086a89653d3...main
  */
 
-package org.orbitmvi.orbit.sample.posts.app.di
+package org.orbitmvi.orbit.sample.posts.domain
 
-import androidx.lifecycle.SavedStateHandle
-import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
-import org.orbitmvi.orbit.sample.posts.app.features.postdetails.viewmodel.PostDetailsViewModel
-import org.orbitmvi.orbit.sample.posts.app.features.postlist.viewmodel.PostListViewModel
 import org.orbitmvi.orbit.sample.posts.data.posts.PostDataRepository
 import org.orbitmvi.orbit.sample.posts.data.posts.network.AvatarUrlGenerator
 import org.orbitmvi.orbit.sample.posts.data.posts.network.PostNetworkDataSource
 import org.orbitmvi.orbit.sample.posts.data.posts.network.httpClientFactory
-import org.orbitmvi.orbit.sample.posts.domain.repositories.PostOverview
 import org.orbitmvi.orbit.sample.posts.domain.repositories.PostRepository
 
-fun module() = module {
-    viewModel { PostListViewModel(get(), get()) }
-
-    viewModel { (savedStateHandle: SavedStateHandle, postOverview: PostOverview) -> PostDetailsViewModel(savedStateHandle, get(), postOverview) }
-
+fun commonModule() = module {
     single {
         httpClientFactory()
     }
@@ -46,4 +34,8 @@ fun module() = module {
     single { AvatarUrlGenerator() }
 
     single<PostRepository> { PostDataRepository(get(), get()) }
+}
+
+expect class DependencyInjection {
+    fun initialiseDependencyInjection(block: KoinAppDeclaration = {})
 }

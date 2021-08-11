@@ -21,19 +21,13 @@
 package org.orbitmvi.orbit.sample.posts.app
 
 import android.app.Application
-import org.orbitmvi.orbit.sample.posts.app.di.module
-import org.koin.android.ext.koin.androidContext
-import org.koin.core.context.startKoin
+import org.orbitmvi.orbit.sample.posts.domain.DependencyInjection
 
 @Suppress("unused")
 class PostsApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-
-        startKoin {
-            androidContext(this@PostsApplication)
-            modules(listOf(module()))
-        }
+        DependencyInjection(this).initialiseDependencyInjection()
     }
 }

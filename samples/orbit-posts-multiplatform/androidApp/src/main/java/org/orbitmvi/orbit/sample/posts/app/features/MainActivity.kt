@@ -33,10 +33,10 @@ import org.koin.android.ext.android.get
 import org.koin.androidx.viewmodel.ext.android.getStateViewModel
 import org.orbitmvi.orbit.sample.posts.app.common.toRouteParcelable
 import org.orbitmvi.orbit.sample.posts.app.features.postdetails.ui.PostDetailsScreen
-import org.orbitmvi.orbit.sample.posts.app.features.postdetails.viewmodel.PostDetailsViewModel
 import org.orbitmvi.orbit.sample.posts.app.features.postlist.ui.PostListScreen
-import org.orbitmvi.orbit.sample.posts.app.features.postlist.viewmodel.PostListViewModel
 import org.orbitmvi.orbit.sample.posts.domain.repositories.PostOverview
+import org.orbitmvi.orbit.sample.posts.domain.viewmodel.list.PostListViewModel
+import org.orbitmvi.orbit.sample.posts.domain.viewmodel.detail.PostDetailsViewModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -58,8 +58,9 @@ class MainActivity : AppCompatActivity() {
                     // Work around a bug in Koin
                     val viewModel = viewModel<PostDetailsViewModel>(factory = object : ViewModelProvider.Factory {
                         @Suppress("UNCHECKED_CAST")
-                        override fun <T : ViewModel?> create(modelClass: Class<T>) =
-                            PostDetailsViewModel(it.savedStateHandle, get(), result) as T
+                        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+                            // it.savedStateHandle
+                            PostDetailsViewModel(get(), result) as T
                     })
 
                     PostDetailsScreen(navController, viewModel)

@@ -3,9 +3,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("multiplatform")
+    kotlin("kapt")
     id("com.android.library")
     id("kotlin-parcelize")
-    kotlin("plugin.serialization") version "1.5.20"
+    kotlin("plugin.serialization") version "1.5.21"
 }
 
 kotlin {
@@ -21,8 +22,8 @@ kotlin {
 
         val commonMain by getting {
             dependencies {
-                implementation("org.orbit-mvi:orbit-core:4.1.3")
-                implementation("dev.icerock.moko:mvvm-core:0.11.0") // only ViewModel, EventsDispatcher, Dispatchers.UI
+                api("org.orbit-mvi:orbit-core:4.1.3")
+                api("dev.icerock.moko:mvvm-core:0.11.0") // only ViewModel, EventsDispatcher, Dispatchers.UI
                 implementation("dev.icerock.moko:parcelize:0.7.1")
 
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
@@ -30,6 +31,7 @@ kotlin {
                 implementation("io.ktor:ktor-client-core:1.6.2")
                 implementation("io.ktor:ktor-client-serialization:1.6.2")
 
+                implementation("io.insert-koin:koin-core:3.1.2")
             }
         }
         val commonTest by getting {
@@ -44,6 +46,7 @@ kotlin {
 
                 implementation("org.orbit-mvi:orbit-viewmodel:4.1.3")
 
+                implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0-alpha03")
 
                 // Dependency Injection
                 implementation("io.insert-koin:koin-android:3.1.2")
@@ -58,6 +61,8 @@ kotlin {
             }
         }
         val iosMain by getting {
+            //kotlin.srcDir("${buildDir.absolutePath}/generated/source/kaptKotlin/")
+
             dependencies {
                 implementation("io.ktor:ktor-client-ios:1.6.2")
             }

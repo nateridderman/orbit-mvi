@@ -34,11 +34,11 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.sample.posts.android.R
 import org.orbitmvi.orbit.sample.posts.app.common.AppBar
-import org.orbitmvi.orbit.sample.posts.app.common.NavigationEvent
 import org.orbitmvi.orbit.sample.posts.app.common.elevation
 import org.orbitmvi.orbit.sample.posts.app.common.toRouteString
-import org.orbitmvi.orbit.sample.posts.app.features.postlist.viewmodel.OpenPostNavigationEvent
-import org.orbitmvi.orbit.sample.posts.app.features.postlist.viewmodel.PostListViewModel
+import org.orbitmvi.orbit.sample.posts.domain.viewmodel.NavigationEvent
+import org.orbitmvi.orbit.sample.posts.domain.viewmodel.list.OpenPostNavigationEvent
+import org.orbitmvi.orbit.sample.posts.domain.viewmodel.list.PostListViewModel
 
 @Composable
 fun PostListScreen(navController: NavController, viewModel: PostListViewModel) {

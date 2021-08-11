@@ -10,28 +10,22 @@ import SwiftUI
 import Combine
 import shared
 
-class PostDetailsViewModel: ObservableObject {
+class PostDetailsViewModelWrapper : ObservableObject {
 
-    @Published var postOverview: PostOverview
+    @Published private(set) var state: PostDetailState
 
-    init(postOverview: PostOverview) {
-        self.postOverview = postOverview
+    private var wrapped: PostDetailsViewModel
 
-        /*state = RoleState(
-            header: RoleState.Header(
-                logoUrl: experience.logoUrl,
-                title: role.title,
-                team: role.team,
-                period: role.period
-            )
-        )
+    init(wrapped: PostDetailsViewModel) {
+        self.wrapped = wrapped
+        self.state = wrapped.container.stateFlow.value as! PostDetailState
 
-        loadDetails()*/
+        (wrapped.container.stateFlow.asPublisher() as AnyPublisher<PostDetailState, Never>)
+                .receive(on: RunLoop.main)
+                .assign(to: &$state)
+    }
+
+    deinit {
+        wrapped.onCleared()
     }
 }
-
-/*struct PostDetailsViewModel_Previews: PreviewProvider {
-    static var previews: some View {
-        PostDetailsViewModel()
-    }
-}*/

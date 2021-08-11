@@ -20,8 +20,8 @@ import coil.compose.rememberImagePainter
 import org.orbitmvi.orbit.sample.posts.android.R
 import org.orbitmvi.orbit.sample.posts.app.common.AppBar
 import org.orbitmvi.orbit.sample.posts.app.common.elevation
-import org.orbitmvi.orbit.sample.posts.app.features.postdetails.viewmodel.PostDetailState
-import org.orbitmvi.orbit.sample.posts.app.features.postdetails.viewmodel.PostDetailsViewModel
+import org.orbitmvi.orbit.sample.posts.domain.viewmodel.detail.PostDetailState
+import org.orbitmvi.orbit.sample.posts.domain.viewmodel.detail.PostDetailsViewModel
 
 @Composable
 fun PostDetailsScreen(navController: NavController, viewModel: PostDetailsViewModel) {

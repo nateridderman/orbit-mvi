@@ -10,32 +10,28 @@ import SwiftUI
 import Combine
 import shared
 
-class PostListViewModel: ObservableObject {
-    
-    @Published var state: PostListState = PostListState(overviews: [])
+class PostListViewModelWrapper : ObservableObject {
 
-    private let repository = PostDataRepository(networkDataSource: PostNetworkDataSource(client: HttpClientFactoryKt.httpClientFactory()),
-                                        avatarUrlGenerator: AvatarUrlGenerator())
-    
-    init() {
-        getOverviews().map { (overviews) -> PostListState in
-            PostListState(overviews: overviews)
-        }
-        .replaceError(with: PostListState(overviews: []))
-        .assign(to: &$state)
+    @Published private(set) var state: PostListState
+    private(set) var sideEffect: AnyPublisher<NavigationEvent, Never>
+
+    private var wrapped: PostListViewModel
+
+    init(wrapped: PostListViewModel) {
+        self.wrapped = wrapped
+        self.state = wrapped.container.stateFlow.value as! PostListState
+        self.sideEffect = wrapped.container.sideEffectFlow.asPublisher() as AnyPublisher<NavigationEvent, Never>
+
+        (wrapped.container.stateFlow.asPublisher() as AnyPublisher<PostListState, Never>)
+                .receive(on: RunLoop.main)
+                .assign(to: &$state)
     }
-    
-    private func getOverviews() -> AnyPublisher<[PostOverview], Error> {
-        Deferred {
-            Future<[PostOverview], Error> { promise in
-                self.repository.getOverviews { (postOverviews: [PostOverview]?, error: Error?) in
-                    if let error = error {
-                        promise(.failure(error))
-                    } else {
-                        promise(.success(postOverviews!))
-                    }
-                }
-            }
-        }.eraseToAnyPublisher()
+
+    func onPostClickedPost(post: PostOverview) {
+        wrapped.onPostClicked(post: post)
+    }
+
+    deinit {
+        wrapped.onCleared()
     }
 }

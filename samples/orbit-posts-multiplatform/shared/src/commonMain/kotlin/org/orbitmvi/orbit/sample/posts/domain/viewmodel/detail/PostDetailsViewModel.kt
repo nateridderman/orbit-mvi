@@ -18,20 +18,18 @@
  * See: https://github.com/orbit-mvi/orbit-mvi/compare/c5b8b3f2b83b5972ba2ad98f73f75086a89653d3...main
  */
 
-package org.orbitmvi.orbit.sample.posts.app.features.postdetails.viewmodel
+package org.orbitmvi.orbit.sample.posts.domain.viewmodel.detail
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
+import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import org.orbitmvi.orbit.ContainerHost
+import org.orbitmvi.orbit.container
 import org.orbitmvi.orbit.sample.posts.domain.repositories.PostOverview
 import org.orbitmvi.orbit.sample.posts.domain.repositories.PostRepository
 import org.orbitmvi.orbit.sample.posts.domain.repositories.Status
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
-import org.orbitmvi.orbit.viewmodel.container
 
 class PostDetailsViewModel(
-    savedStateHandle: SavedStateHandle,
     private val postRepository: PostRepository,
     private val postOverview: PostOverview
 ) : ViewModel(), ContainerHost<PostDetailState, Nothing> {
@@ -41,7 +39,7 @@ class PostDetailsViewModel(
         println("onCleared")
     }
 
-    override val container = container<PostDetailState, Nothing>(PostDetailState.NoDetailsAvailable(postOverview), savedStateHandle) {
+    override val container = viewModelScope.container<PostDetailState, Nothing>(PostDetailState.NoDetailsAvailable(postOverview)) {
         if (it !is PostDetailState.Details) {
             loadDetails()
         }

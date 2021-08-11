@@ -18,13 +18,16 @@
  * See: https://github.com/orbit-mvi/orbit-mvi/compare/c5b8b3f2b83b5972ba2ad98f73f75086a89653d3...main
  */
 
-package org.orbitmvi.orbit.sample.posts.app.features.postlist.viewmodel
+package org.orbitmvi.orbit.sample.posts.domain.viewmodel.detail
 
-import android.os.Parcelable
+import org.orbitmvi.orbit.sample.posts.domain.repositories.PostDetail
 import org.orbitmvi.orbit.sample.posts.domain.repositories.PostOverview
-import kotlinx.parcelize.Parcelize
 
-@Parcelize
-data class PostListState(
-    val overviews: List<PostOverview> = emptyList()
-) : Parcelable
+sealed class PostDetailState {
+
+    abstract val postOverview: PostOverview
+
+    data class Details(override val postOverview: PostOverview, val post: PostDetail) : PostDetailState()
+
+    data class NoDetailsAvailable(override val postOverview: PostOverview) : PostDetailState()
+}
