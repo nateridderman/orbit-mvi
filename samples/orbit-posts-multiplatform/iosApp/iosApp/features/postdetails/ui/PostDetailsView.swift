@@ -11,20 +11,14 @@ import shared
 
 struct PostDetailsView: View {
     
-    @SceneStorage("sceneStorage") var sceneStorage = ""
-
     @StateObject private var postDetailsViewModel: PostDetailsViewModelWrapper
 
     var body: some View {
         let state = postDetailsViewModel.state
         Text(state.postOverview.title)
         
-        Text(sceneStorage)
-
         if let state = state as? PostDetailState.Details {
-            Text(state.post.body).onTapGesture {
-                sceneStorage = "bob"
-            }
+            Text(state.post.body)
         }
     }
 }
@@ -37,9 +31,7 @@ struct PostDetailsView: View {
 
 extension PostDetailsView {
     static func create(postOverview: PostOverview) -> some View {
-        print("PostDetailsView.create")
-        
-        let postDetailsViewModel = PostDetailsViewModelWrapper(wrapped: ViewModels().postDetailsViewModel(postOverview: postOverview))
+        let postDetailsViewModel = ViewModels().postDetailsViewModel(postOverview: postOverview).asStateObject()
 
         return PostDetailsView(postDetailsViewModel: postDetailsViewModel)
     }

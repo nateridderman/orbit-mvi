@@ -27,11 +27,17 @@ class PostListViewModelWrapper : ObservableObject {
                 .assign(to: &$state)
     }
 
-    func onPostClickedPost(post: PostOverview) {
+    func onPostClicked(post: PostOverview) {
         wrapped.onPostClicked(post: post)
     }
 
     deinit {
         wrapped.onCleared()
+    }
+}
+
+extension PostListViewModel {
+    func asStateObject() -> PostListViewModelWrapper {
+        return PostListViewModelWrapper(wrapped: self)
     }
 }

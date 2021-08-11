@@ -29,3 +29,9 @@ class PostDetailsViewModelWrapper : ObservableObject {
         wrapped.onCleared()
     }
 }
+
+extension PostDetailsViewModel {
+    func asStateObject() -> PostDetailsViewModelWrapper {
+        return PostDetailsViewModelWrapper(wrapped: self)
+    }
+}

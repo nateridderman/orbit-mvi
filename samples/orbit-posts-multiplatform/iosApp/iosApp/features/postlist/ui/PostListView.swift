@@ -12,7 +12,7 @@ import shared
 
 struct PostListView: View {
 
-    @StateObject private var postListViewModel = PostListViewModelWrapper(wrapped: ViewModels().postListViewModel())
+    @StateObject private var postListViewModel = ViewModels().postListViewModel().asStateObject()
 
     @State private var showingNavigation: ContentViewNavigation?
 
@@ -22,7 +22,7 @@ struct PostListView: View {
                 VStack(alignment: .leading, spacing: 0) {
                     ForEach(postListViewModel.state.overviews, id: \.self) { overview in
                         Button(action: {
-                            postListViewModel.onPostClickedPost(post: overview)
+                            postListViewModel.onPostClicked(post: overview)
                         }) {
                             PostListItemView(postOverview: overview)
                                 .padding(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
