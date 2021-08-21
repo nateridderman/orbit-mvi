@@ -1,11 +1,24 @@
 /*
- * Copyright 2010-2019 JetBrains s.r.o. and Kotlin Programming Language contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ * Copyright 2021 Mikołaj Leszczyński & Appmattus Limited
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 @file:Suppress("PackageDirectoryMismatch") // Old package for compatibility
 package org.orbitmvi.orbit.swift
 
+import com.samskivert.mustache.Mustache
+import com.samskivert.mustache.Template
 import java.io.File
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
@@ -16,10 +29,12 @@ import org.gradle.api.tasks.Nested
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.wrapper.Wrapper
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.cocoapods.CocoapodsExtension
 import org.jetbrains.kotlin.gradle.plugin.cocoapods.CocoapodsExtension.CocoapodsDependency
 import org.jetbrains.kotlin.gradle.plugin.cocoapods.CocoapodsExtension.PodspecPlatformSettings
+import org.jetbrains.kotlin.gradle.plugin.cocoapods.KotlinCocoapodsPlugin
 
 /**
  * The task generates a podspec file which allows a user to
@@ -70,44 +85,51 @@ open class PodspecTask : DefaultTask() {
 
     @TaskAction
     fun generate() {
-        val root = project.buildDir.resolve("cocoapods")
-        val framework = root.resolve("framework")
 
-        val frameworkDir = framework.relativeTo(outputFileProvider.get().parentFile).path
-        val dependencies = pods.get().joinToString(separator = "\n") { pod ->
-            val versionSuffix = if (pod.version != null) ", '${pod.version}'" else ""
-            "|    spec.dependency '${pod.name}'$versionSuffix"
+        val gradleWrapper = (project.rootProject.tasks.getByName("wrapper") as? Wrapper)?.scriptFile
+        require(gradleWrapper != null && gradleWrapper.exists()) {
+            """
+            The Gradle wrapper is required to run the build from Xcode.
+
+            Run the `:wrapper` task to generate the wrapper manually.
+
+            See details about the wrapper at https://docs.gradle.org/current/userguide/gradle_wrapper.html
+            """.trimIndent()
         }
 
-        val deploymentTargets = run {
-            listOf(ios, osx, tvos, watchos).map { it.get() }.filter { it.deploymentTarget != null }.joinToString("\n") {
-                "|    ${"spec.${it.name}.deployment_target".padEnd(30, ' ')}= '${it.deploymentTarget}'"
-            }
-        }
+        val data = mapOf(
+            "specName" to specName,
+            "version" to version.get(),
+            "homepage" to homepage.getOrEmpty(),
+            "authors" to authors.getOrEmpty(),
+            "license" to license.getOrEmpty(),
+            "summary" to summary.getOrEmpty(),
+            "frameworkDir" to project.buildDir.resolve("cocoapods/framework").relativeTo(outputFileProvider.get().parentFile).path,
+            "iosTarget" to KotlinCocoapodsPlugin.KOTLIN_TARGET_FOR_IOS_DEVICE,
+            "watchosTarget" to KotlinCocoapodsPlugin.KOTLIN_TARGET_FOR_WATCHOS_DEVICE,
+            "deploymentTargets" to listOf(ios, osx, tvos, watchos).map { it.get() }.filter { it.deploymentTarget != null }.map {
+                mapOf(
+                    "name" to it.name,
+                    "deploymentTarget" to it.deploymentTarget
+                )
+            },
+            "dependencies" to pods.get().map { pod ->
+                mapOf(
+                    "name" to pod.name,
+                    "versionSuffix" to if (pod.version != null) ", '${pod.version}'" else ""
+                )
+            },
+            "gradleCommand" to "\$REPO_ROOT/${gradleWrapper.toRelativeString(project.projectDir)}",
+            "syncTask" to "${project.path}:syncOrbitSwift",
+            "propertyTarget" to KotlinCocoapodsPlugin.TARGET_PROPERTY,
+            "propertyConfig" to KotlinCocoapodsPlugin.CONFIGURATION_PROPERTY,
+            "propertyCflags" to KotlinCocoapodsPlugin.CFLAGS_PROPERTY,
+            "propertyHeaderPaths" to KotlinCocoapodsPlugin.HEADER_PATHS_PROPERTY,
+            "propertyFrameworkPaths" to KotlinCocoapodsPlugin.FRAMEWORK_PATHS_PROPERTY,
+        )
 
         with(outputFileProvider.get()) {
-            writeText(
-                """
-                |Pod::Spec.new do |spec|
-                |    spec.name                     = '$specName'
-                |    spec.version                  = '${version.get()}'
-                |    spec.homepage                 = '${homepage.getOrEmpty()}'
-                |    spec.source                   = { :git => "Not Published", :tag => "Cocoapods/#{spec.name}/#{spec.version}" }
-                |    spec.authors                  = '${authors.getOrEmpty()}'
-                |    spec.license                  = '${license.getOrEmpty()}'
-                |    spec.summary                  = '${summary.getOrEmpty()}'
-                |
-                |    spec.static_framework         = true
-                |    spec.source_files             = "$frameworkDir/$specName/**/*.{h,m,swift}"
-                |    spec.module_name              = "#{spec.name}"
-                |
-                $deploymentTargets
-                |
-                $dependencies
-                |
-                |end
-        """.trimMargin()
-            )
+            writeText(template.execute(data))
 
             if (hasPodfileOwnOrParent(project)) {
                 logger.quiet(
@@ -120,7 +142,6 @@ open class PodspecTask : DefaultTask() {
             """.trimIndent()
                 )
             }
-
         }
     }
 
@@ -137,5 +158,8 @@ open class PodspecTask : DefaultTask() {
 
         private val Project.multiplatformExtensionOrNull: KotlinMultiplatformExtension?
             get() = extensions.findByType(KotlinMultiplatformExtension::class.java)
+
+        private val template: Template = Mustache.compiler()
+            .compile(PodspecTask::class.java.classLoader.getResource("podspec.mustache")!!.readText())
     }
 }
