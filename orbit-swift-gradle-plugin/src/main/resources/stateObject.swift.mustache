@@ -18,10 +18,10 @@ import SwiftUI
 import Combine
 import {{frameworkName}}
 
-class {{className}}StateObject : ObservableObject {
+public class {{className}}StateObject : ObservableObject {
 
-{{#hasState}}    @Published private(set) var state: {{stateType}}
-{{/hasState}}{{#hasSideEffect}}    private(set) var sideEffect: AnyPublisher<{{sideEffectType}}, Never>
+{{#hasState}}    @Published public private(set) var state: {{stateType}}
+{{/hasState}}{{#hasSideEffect}}    public private(set) var sideEffect: AnyPublisher<{{sideEffectType}}, Never>
 {{/hasSideEffect}}
 
     private var wrapped: {{className}}
@@ -36,7 +36,7 @@ class {{className}}StateObject : ObservableObject {
                 .assign(to: &$state){{/hasState}}
     }{{#functions}}
 
-    func {{name}}({{#parameters}}{{^-first}}, {{/-first}}{{name}}: {{type}}{{/parameters}}) {
+    public func {{name}}({{#parameters}}{{^-first}}, {{/-first}}{{name}}: {{type}}{{/parameters}}) {
         wrapped.{{name}}({{#parameters}}{{^-first}}, {{/-first}}{{name}}: {{name}}{{/parameters}})
     }{{/functions}}
 
@@ -45,7 +45,7 @@ class {{className}}StateObject : ObservableObject {
     }
 }
 
-extension {{className}} {
+public extension {{className}} {
     func asStateObject() -> {{className}}StateObject {
         return {{className}}StateObject(wrapped: self)
     }
