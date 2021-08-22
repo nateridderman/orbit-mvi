@@ -37,7 +37,12 @@ import androidx.compose.ui.unit.dp
 import org.orbitmvi.orbit.sample.posts.android.R
 
 @Composable
-fun AppBar(topAppBarText: String, elevation: Dp = AppBarDefaults.TopAppBarElevation, iconPainter: Painter? = null, onBackPressed: (() -> Unit)? = null) {
+fun AppBar(
+    topAppBarText: String,
+    elevation: Dp = AppBarDefaults.TopAppBarElevation,
+    iconPainter: Painter? = null,
+    onBackPressed: (() -> Unit)? = null
+) {
     TopAppBar(
         title = {
             Row {

@@ -83,7 +83,7 @@ class OrbitSwiftPlugin : Plugin<Project> {
                     configure {
                         group = BasePlugin.BUILD_GROUP
                         description =
-                            "Generate Orbit Multiplatform Swift code for framework '${framework.name}' and target '${framework.architectureName}'"
+                            "Generate Orbit Multiplatform code for framework '${framework.name}' and target '${framework.architectureName}'"
                     }
                 }
 

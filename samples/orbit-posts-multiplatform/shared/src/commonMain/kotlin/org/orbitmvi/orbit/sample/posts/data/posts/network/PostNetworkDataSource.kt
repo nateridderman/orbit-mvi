@@ -31,17 +31,17 @@ class PostNetworkDataSource(private val client: HttpClient) {
     suspend fun getPost(id: Int): Status<PostData> {
         return try {
             Status.Success(client.getJson("posts/$id"))
-        } catch (e: Exception) {
-            println(e)
-            Status.Failure(e)
+        } catch (expected: Exception) {
+            println(expected)
+            Status.Failure(expected)
         }
     }
 
     suspend fun getPosts(): List<PostData> {
         return try {
             client.getJson<List<PostData>>("posts").sortedBy { it.title }
-        } catch (e: Exception) {
-            println(e)
+        } catch (expected: Exception) {
+            println(expected)
             emptyList()
         }
     }
@@ -49,8 +49,8 @@ class PostNetworkDataSource(private val client: HttpClient) {
     suspend fun getUsers(): List<UserData> {
         return try {
             client.getJson("users")
-        } catch (e: Exception) {
-            println(e)
+        } catch (expected: Exception) {
+            println(expected)
             emptyList()
         }
     }
@@ -58,8 +58,8 @@ class PostNetworkDataSource(private val client: HttpClient) {
     suspend fun getUser(id: Int): UserData? {
         return try {
             client.getJson<UserData>("users/$id")
-        } catch (e: Exception) {
-            println(e)
+        } catch (expected: Exception) {
+            println(expected)
             null
         }
     }
@@ -67,8 +67,8 @@ class PostNetworkDataSource(private val client: HttpClient) {
     suspend fun getComments(): List<CommentData> {
         return try {
             client.getJson("comments")
-        } catch (e: Exception) {
-            println(e)
+        } catch (expected: Exception) {
+            println(expected)
             emptyList()
         }
     }
@@ -76,8 +76,8 @@ class PostNetworkDataSource(private val client: HttpClient) {
     suspend fun getComments(postId: Int): List<CommentData> {
         return try {
             client.getJson("posts/$postId/comments")
-        } catch (e: Exception) {
-            println(e)
+        } catch (expected: Exception) {
+            println(expected)
             emptyList()
         }
     }

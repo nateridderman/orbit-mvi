@@ -152,52 +152,58 @@ subprojects {
             }
         }
     }
-    plugins.withType<org.jetbrains.kotlin.gradle.plugin.KotlinPluginWrapper> {
-        apply(from = "$rootDir/gradle/scripts/jacoco.gradle.kts")
-        configure<org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension> {
-            // for strict mode
-            explicitApi()
-        }
-    }
-    plugins.withType<org.jetbrains.kotlin.gradle.plugin.KotlinPluginWrapper> {
-        apply(from = "$rootDir/gradle/scripts/jacoco.gradle.kts")
-        configure<org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension> {
-            // for strict mode
-            explicitApi()
-        }
-    }
-    plugins.withType<org.jetbrains.kotlin.gradle.plugin.KotlinMultiplatformPluginWrapper> {
-        apply(from = "$rootDir/gradle/scripts/jacoco.gradle.kts")
-        configure<org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension> {
-            // for strict mode
-            explicitApi()
-        }
-    }
-    plugins.withId("com.android.library") {
-        plugins.withType<org.jetbrains.kotlin.gradle.plugin.KotlinAndroidPluginWrapper> {
+
+    if (!this.isSample()) {
+        plugins.withType<org.jetbrains.kotlin.gradle.plugin.KotlinPluginWrapper> {
+            apply(from = "$rootDir/gradle/scripts/jacoco.gradle.kts")
             configure<org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension> {
                 // for strict mode
                 explicitApi()
             }
         }
-        apply(from = "$rootDir/gradle/scripts/jacoco-android.gradle.kts")
-
-        configure<LibraryExtension> {
-            compileSdkVersion(30)
-            defaultConfig {
-                minSdkVersion(21)
-                targetSdkVersion(30)
+        plugins.withType<org.jetbrains.kotlin.gradle.plugin.KotlinPluginWrapper> {
+            apply(from = "$rootDir/gradle/scripts/jacoco.gradle.kts")
+            configure<org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension> {
+                // for strict mode
+                explicitApi()
             }
+        }
 
-            buildTypes {
-                getByName("release") {
-                    isMinifyEnabled = false
+        plugins.withType<org.jetbrains.kotlin.gradle.plugin.KotlinMultiplatformPluginWrapper> {
+            apply(from = "$rootDir/gradle/scripts/jacoco.gradle.kts")
+            configure<org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension> {
+                // for strict mode
+                explicitApi()
+            }
+        }
+
+        plugins.withId("com.android.library") {
+            plugins.withType<org.jetbrains.kotlin.gradle.plugin.KotlinAndroidPluginWrapper> {
+                configure<org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension> {
+                    // for strict mode
+                    explicitApi()
                 }
             }
 
-            sourceSets {
-                get("main").java.srcDir("src/main/kotlin")
-                get("test").java.srcDir("src/test/kotlin")
+            apply(from = "$rootDir/gradle/scripts/jacoco-android.gradle.kts")
+
+            configure<LibraryExtension> {
+                compileSdkVersion(30)
+                defaultConfig {
+                    minSdkVersion(21)
+                    targetSdkVersion(30)
+                }
+
+                buildTypes {
+                    getByName("release") {
+                        isMinifyEnabled = false
+                    }
+                }
+
+                sourceSets {
+                    get("main").java.srcDir("src/main/kotlin")
+                    get("test").java.srcDir("src/test/kotlin")
+                }
             }
         }
     }
@@ -208,4 +214,15 @@ markdownlint {
         +LineLengthRule(codeBlocks = false, tables = false)
         +ProperNamesRule(names = DefaultNames + "Orbit")
     }
+}
+
+fun Project.isSample(): Boolean {
+    var parentNode: Project? = this
+    while (parentNode != null) {
+        if (parentNode.name == "samples") {
+            return true
+        }
+        parentNode = parentNode.parent
+    }
+    return false
 }

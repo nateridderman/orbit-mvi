@@ -35,7 +35,7 @@ pluginBundle {
     tags = listOf("kotlin", "mvi", "swift", "multiplatform")
 }
 
-version = "1.0"//System.getenv("CIRCLE_TAG") ?: System.getProperty("CIRCLE_TAG") ?: "unknown"
+version = "1.0" // System.getenv("CIRCLE_TAG") ?: System.getProperty("CIRCLE_TAG") ?: "unknown"
 group = "org.orbitmvi"
 
 repositories {

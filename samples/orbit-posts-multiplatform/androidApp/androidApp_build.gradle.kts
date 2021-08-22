@@ -6,7 +6,7 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":shared"))
+    implementation(project(":samples:orbit-posts-multiplatform:shared"))
     implementation("androidx.appcompat:appcompat:1.3.1")
 
     implementation("org.orbit-mvi:orbit-core:4.1.3")
@@ -44,7 +44,6 @@ dependencies {
     // Lifecycle
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07")
 
-
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
 }
 
@@ -80,9 +79,9 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
 
-        //freeCompilerArgs += listOf(
+        // freeCompilerArgs += listOf(
         //    "-P", "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"
-        //)
+        // )
     }
 
     composeOptions {

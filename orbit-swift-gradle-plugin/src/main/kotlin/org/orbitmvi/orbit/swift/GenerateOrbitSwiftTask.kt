@@ -39,7 +39,9 @@ internal open class GenerateOrbitSwiftTask @Inject constructor(
 
     @get:InputFiles
     internal val inputFilesProvider: Provider<List<File>>
-        get() = project.provider { processorContext.framework.linkTask.exportLibraries + processorContext.framework.linkTask.intermediateLibrary.get() }
+        get() = project.provider {
+            processorContext.framework.linkTask.exportLibraries + processorContext.framework.linkTask.intermediateLibrary.get()
+        }
 
     @get:OutputDirectory
     internal val outputDirectoryProvider: Provider<File>
@@ -66,6 +68,7 @@ internal open class GenerateOrbitSwiftTask @Inject constructor(
         }
     }
 
+    @Suppress("NestedBlockDepth")
     private fun processFeatureContext(library: File, processorContext: ProcessorContext) {
         val metadata = KotlinMetadataLibraryProvider.readLibraryMetadata(logger, library) ?: return
 

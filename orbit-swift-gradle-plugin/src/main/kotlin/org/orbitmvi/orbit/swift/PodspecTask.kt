@@ -134,7 +134,7 @@ open class PodspecTask : DefaultTask() {
             if (hasPodfileOwnOrParent(project)) {
                 logger.quiet(
                     """
-                    Generated a podspec file at: ${absolutePath}.
+                    Generated a podspec file at: $absolutePath.
                     To include it in your Xcode project, check that the following dependency snippet exists in your Podfile:
 
                     pod '$specName', :path => '${parentFile.absolutePath}'
@@ -153,8 +153,8 @@ open class PodspecTask : DefaultTask() {
 
         private fun hasPodfileOwnOrParent(project: Project): Boolean =
             if (project.rootProject == project) project.multiplatformExtensionOrNull?.cocoapodsExtensionOrNull?.podfile != null
-            else project.multiplatformExtensionOrNull?.cocoapodsExtensionOrNull?.podfile != null
-                    || (project.parent?.let { hasPodfileOwnOrParent(it) } ?: false)
+            else project.multiplatformExtensionOrNull?.cocoapodsExtensionOrNull?.podfile != null ||
+                    (project.parent?.let { hasPodfileOwnOrParent(it) } ?: false)
 
         private val Project.multiplatformExtensionOrNull: KotlinMultiplatformExtension?
             get() = extensions.findByType(KotlinMultiplatformExtension::class.java)

@@ -24,9 +24,13 @@ include(
     "orbit-viewmodel",
     "samples:orbit-calculator",
     "samples:orbit-posts",
+    "samples:orbit-posts-multiplatform:androidApp",
+    "samples:orbit-posts-multiplatform:shared",
     "samples:orbit-stocklist",
     "test-common"
 )
+
+includeBuild("orbit-swift-gradle-plugin")
 
 fun renameBuildFileToModuleName(project: ProjectDescriptor) {
     project.buildFileName = "${project.name}_build.gradle.kts"
