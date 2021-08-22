@@ -24,7 +24,6 @@ Pod::Spec.new do |spec|
     spec.summary                  = '{{summary}}'
 
     spec.source_files             = "{{frameworkDir}}/{{specName}}/**/*.{h,m,swift}"
-    spec.module_name              = "#{spec.name}_umbrella"
 
 {{#deploymentTargets}}
     spec.{{name}}.deployment_target = '{{deploymentTarget}}'

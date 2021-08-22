@@ -104,7 +104,7 @@ open class PodspecTask : DefaultTask() {
             "authors" to authors.getOrEmpty(),
             "license" to license.getOrEmpty(),
             "summary" to summary.getOrEmpty(),
-            "frameworkDir" to project.buildDir.resolve("cocoapods/framework").relativeTo(outputFileProvider.get().parentFile).path,
+            "frameworkDir" to project.buildDir.resolve("cocoapods/orbit").relativeTo(outputFileProvider.get().parentFile).path,
             "iosTarget" to KotlinCocoapodsPlugin.KOTLIN_TARGET_FOR_IOS_DEVICE,
             "watchosTarget" to KotlinCocoapodsPlugin.KOTLIN_TARGET_FOR_WATCHOS_DEVICE,
             "deploymentTargets" to listOf(ios, osx, tvos, watchos).map { it.get() }.filter { it.deploymentTarget != null }.map {
