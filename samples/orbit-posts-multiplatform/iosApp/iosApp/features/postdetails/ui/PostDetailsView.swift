@@ -16,10 +16,11 @@
 
 import SwiftUI
 import shared
+import sharedOrbitSwift
 
 struct PostDetailsView: View {
     
-    @StateObject private var postDetailsViewModel: PostDetailsViewModelWrapper
+    @StateObject private var postDetailsViewModel: PostDetailsViewModelStateObject
 
     var body: some View {
         let state = postDetailsViewModel.state

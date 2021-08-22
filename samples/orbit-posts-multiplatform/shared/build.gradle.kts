@@ -1,23 +1,32 @@
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     kotlin("multiplatform")
+    kotlin("native.cocoapods")
     kotlin("kapt")
     id("com.android.library")
     id("kotlin-parcelize")
     kotlin("plugin.serialization") version "1.5.21"
+    id("org.orbitmvi.orbit.swift")
 }
+
+// CocoaPods requires the podspec to have a version.
+version = "1.0"
 
 kotlin {
     android()
-    ios {
-        binaries {
-            framework {
-                baseName = "shared"
-            }
-        }
+    ios()
+
+    cocoapods {
+        authors = "Mikołaj Leszczyński & Appmattus Limited"
+        license = "Apache License, Version 2.0"
+        summary = "Orbit Multiplatform Posts"
+
+        // Configure fields required by CocoaPods.
+        homepage = "Link to a Kotlin/Native module homepage"
+        frameworkName = "shared"
+        ios.deploymentTarget = "14.1"
+        podfile = project.file("../iosApp/Podfile")
     }
+
     sourceSets {
 
         val commonMain by getting {
@@ -50,8 +59,6 @@ kotlin {
 
                 // Dependency Injection
                 implementation("io.insert-koin:koin-android:3.1.2")
-
-
             }
         }
         val androidTest by getting {
@@ -61,8 +68,6 @@ kotlin {
             }
         }
         val iosMain by getting {
-            //kotlin.srcDir("${buildDir.absolutePath}/generated/source/kaptKotlin/")
-
             dependencies {
                 implementation("io.ktor:ktor-client-ios:1.6.2")
             }
@@ -79,37 +84,3 @@ android {
         targetSdk = 30
     }
 }
-
-val xcFrameworkPath = "$buildDir/xcode-frameworks/${project.name}.xcframework"
-
-tasks.create<Delete>("deleteXcFramework") { delete = setOf(xcFrameworkPath) }
-
-val buildXcFramework by tasks.registering {
-    dependsOn("deleteXcFramework")
-    group = "build"
-    val mode = "Release"
-    val frameworks = arrayOf("iosArm64", "iosX64")
-        .map { kotlin.targets.getByName<KotlinNativeTarget>(it).binaries.getFramework(mode) }
-    inputs.property("mode", mode)
-    dependsOn(frameworks.map { it.linkTask })
-    doLast { buildXcFramework(frameworks) }
-}
-
-fun Task.buildXcFramework(frameworks: List<org.jetbrains.kotlin.gradle.plugin.mpp.Framework>) {
-    val buildArgs: () -> List<String> = {
-        val arguments = mutableListOf("-create-xcframework")
-        frameworks.forEach {
-            arguments += "-framework"
-            arguments += "${it.outputDirectory}/${project.name}.framework"
-        }
-        arguments += "-output"
-        arguments += xcFrameworkPath
-        arguments
-    }
-    exec {
-        executable = "xcodebuild"
-        args = buildArgs()
-    }
-}
-
-tasks.getByName("build").dependsOn(buildXcFramework)

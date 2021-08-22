@@ -30,11 +30,6 @@ class PostDetailsViewModel(
     private val postOverview: PostOverview
 ) : ViewModel(), ContainerHost<PostDetailState, Nothing> {
 
-    override fun onCleared() {
-        super.onCleared()
-        println("onCleared")
-    }
-
     override val container = viewModelScope.container<PostDetailState, Nothing>(PostDetailState.NoDetailsAvailable(postOverview)) {
         if (it !is PostDetailState.Details) {
             loadDetails()
