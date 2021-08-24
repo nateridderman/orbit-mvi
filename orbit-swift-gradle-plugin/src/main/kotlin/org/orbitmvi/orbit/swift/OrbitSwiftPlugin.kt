@@ -74,7 +74,8 @@ class OrbitSwiftPlugin : Plugin<Project> {
 
                 val processorContext = ProcessorContext(
                     cocoapodsExtension = cocoapodsExtension,
-                    framework = framework
+                    framework = framework,
+                    logger = project.logger
                 )
 
                 val taskName = lowerCamelCaseName("generateOrbitSwift", framework.name, framework.architectureName)

@@ -17,12 +17,14 @@
 package org.orbitmvi.orbit.swift.feature
 
 import java.io.File
+import org.gradle.api.logging.Logger
 import org.jetbrains.kotlin.gradle.plugin.cocoapods.CocoapodsExtension
 import org.jetbrains.kotlin.gradle.plugin.mpp.Framework
 
 data class ProcessorContext(
     private val cocoapodsExtension: CocoapodsExtension,
-    val framework: Framework
+    val framework: Framework,
+    val logger: Logger
 ) {
     val outputDir: File by lazy {
         File(framework.outputDirectory, "${cocoapodsExtension.frameworkName}OrbitSwift")

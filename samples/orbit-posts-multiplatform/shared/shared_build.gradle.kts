@@ -32,7 +32,7 @@ kotlin {
         @Suppress("UnusedPrivateMember")
         val commonMain by getting {
             dependencies {
-                api("org.orbit-mvi:orbit-core:4.1.3")
+                api("org.orbit-mvi:orbit-core:4.2.0")
                 api("dev.icerock.moko:mvvm-core:0.11.0") // only ViewModel, EventsDispatcher, Dispatchers.UI
                 implementation("dev.icerock.moko:parcelize:0.7.1")
 
@@ -56,7 +56,7 @@ kotlin {
             dependencies {
                 implementation("io.ktor:ktor-client-android:1.6.2")
 
-                implementation("org.orbit-mvi:orbit-viewmodel:4.1.3")
+                implementation("org.orbit-mvi:orbit-viewmodel:4.2.0")
 
                 implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0-alpha03")
 

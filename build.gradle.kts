@@ -30,6 +30,8 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        gradlePluginPortal()
+        maven("https://jitpack.io")
     }
 
     dependencies {
@@ -37,6 +39,7 @@ buildscript {
         classpath(PluginDependencies.kotlin)
         classpath(PluginDependencies.safeargs)
         classpath(PluginDependencies.atomicfu)
+        classpath("dev.icerock.moko:kswift-gradle-plugin:0.3.0")
     }
 }
 
@@ -100,7 +103,7 @@ subprojects {
 
     version = (System.getenv("GITHUB_REF") ?: System.getProperty("GITHUB_REF"))
         ?.replaceFirst("refs/tags/", "") ?: "unspecified"
-
+    if (!this.isSample()) {
     tasks.withType<Test> {
         @Suppress("UnstableApiUsage")
         if (project.name !in listOf("orbit-core", "orbit-test", "orbit-viewmodel")) {
@@ -153,7 +156,7 @@ subprojects {
         }
     }
 
-    if (!this.isSample()) {
+
         plugins.withType<org.jetbrains.kotlin.gradle.plugin.KotlinPluginWrapper> {
             apply(from = "$rootDir/gradle/scripts/jacoco.gradle.kts")
             configure<org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension> {

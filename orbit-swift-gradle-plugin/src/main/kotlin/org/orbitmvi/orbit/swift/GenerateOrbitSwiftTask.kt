@@ -111,7 +111,7 @@ internal open class GenerateOrbitSwiftTask @Inject constructor(
 
                     return KlibModuleMetadata.read(KotlinMetadataLibraryProvider(library))
                 } catch (exc: IllegalStateException) {
-                    logger.info("library can't be read", exc)
+                    logger.error("library can't be read", exc)
                 } catch (exc: Exception) {
                     logger.error("can't parse metadata", exc)
                 }

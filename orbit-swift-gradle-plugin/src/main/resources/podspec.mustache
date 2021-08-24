@@ -25,6 +25,7 @@ Pod::Spec.new do |spec|
 
     spec.source_files             = "{{frameworkDir}}/{{specName}}/**/*.{h,m,swift}"
 
+    spec.swift_version            = '5.0'
 {{#deploymentTargets}}
     spec.{{name}}.deployment_target = '{{deploymentTarget}}'
 {{/deploymentTargets}}

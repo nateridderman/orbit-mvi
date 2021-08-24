@@ -25,14 +25,14 @@ object Versions {
     const val gradleMavenPublishPlugin = "0.14.2"
     const val dokkaPlugin = "1.5.0"
     const val markdownLintPlugin = "0.6.0"
-    const val detektPlugin = "1.17.1"
+    const val detektPlugin = "1.18.0"
     const val safeargs = "2.3.5"
     const val atomicfu = "0.16.2"
 
     const val kotlin = "1.5.21"
     const val coroutines = "1.5.1-native-mt"
 
-    const val androidxLifecycles = "2.4.0-alpha02"
+    const val androidxLifecycles = "2.4.0-alpha03"
     const val androidxEspresso = "3.4.0"
 
     const val desugar = "1.1.5"

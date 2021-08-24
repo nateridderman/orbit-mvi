@@ -9,12 +9,12 @@ dependencies {
     implementation(project(":samples:orbit-posts-multiplatform:shared"))
     implementation("androidx.appcompat:appcompat:1.3.1")
 
-    implementation("org.orbit-mvi:orbit-core:4.1.3")
-    implementation("org.orbit-mvi:orbit-viewmodel:4.1.3")
+    implementation("org.orbit-mvi:orbit-core:4.2.0")
+    implementation("org.orbit-mvi:orbit-viewmodel:4.2.0")
 
     implementation("io.ktor:ktor-client-android:1.6.2")
 
-    implementation("io.coil-kt:coil-compose:1.3.1")
+    implementation("io.coil-kt:coil-compose:1.3.2")
 
     // Dependency Injection
     implementation("io.insert-koin:koin-android:3.1.2")
@@ -39,7 +39,7 @@ dependencies {
     // Material design icons
     implementation("androidx.compose.material:material-icons-core:1.0.1")
     // Navigation
-    implementation("androidx.navigation:navigation-compose:2.4.0-alpha06")
+    implementation("androidx.navigation:navigation-compose:2.4.0-alpha07")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0-alpha03")
     // Lifecycle
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07")
