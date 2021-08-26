@@ -30,8 +30,6 @@ include(
     "test-common"
 )
 
-includeBuild("orbit-swift-gradle-plugin")
-
 fun renameBuildFileToModuleName(project: ProjectDescriptor) {
     project.buildFileName = "${project.name}_build.gradle.kts"
     project.children.forEach { child -> renameBuildFileToModuleName(child) }
