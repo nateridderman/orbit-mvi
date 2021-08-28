@@ -5,7 +5,7 @@ plugins {
     id("com.android.library")
     id("kotlin-parcelize")
     kotlin("plugin.serialization")
-    id("org.orbitmvi.orbit.swift")
+    id("org.orbit-mvi.orbit.swift") version "0.1.0"
 }
 
 // CocoaPods requires the podspec to have a version.
